@@ -12,7 +12,7 @@ const root = async (req: Request, res: Response, next: NextFunction) => {
 /* Create user from request body */
 const create = async (req: Request, res: Response, next: NextFunction) => {
   const input = req.body as UserDocument;
-  const user = await UserService.create(input)
+  const user = await UserService.register(input)
     .then()
     .catch((e) => {
       throw new Error(e);

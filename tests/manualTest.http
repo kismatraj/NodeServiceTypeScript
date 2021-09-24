@@ -1,7 +1,7 @@
 @hostName=http://localhost:3000/api/v1
 
 ### Service Root Test
-GET {{hostName}} 
+GET {{hostName}}/sdfhdsk 
 
 ### Get Users Route
 GET  {{hostName}}

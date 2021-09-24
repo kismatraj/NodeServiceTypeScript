@@ -1,4 +1,5 @@
 import { Error, FilterQuery, QueryOptions, Schema } from 'mongoose';
+import create from 'http-errors';
 import UserDocument from '@src/api/mongodb/documents/user.document';
 import UserModel from '@src/api/mongodb/models/user.model';
 import IUserLogin from '../interfaces/userLogin.interface';
@@ -8,7 +9,7 @@ import IUserLogin from '../interfaces/userLogin.interface';
  * @param input Body of type IUser
  * @returns created user
  */
-const create = async function (input: UserDocument) {
+const register = async function (input: UserDocument) {
   return await UserModel.create(input);
 };
 
@@ -29,7 +30,7 @@ const findById = async function (id: string) {
 const login = async function (login: IUserLogin) {
   const data = await UserModel.findOne({ loginId: login.loginId });
   if (!data) {
-    throw new Error('Wrong Credentials');
+    throw create(new create.Unauthorized('Invalid credentials'));
   }
   // const user = new UserModel();
   return data.comparePassword(login.password);
@@ -40,13 +41,13 @@ const update = async function (id: string, update: UserDocument) {
   const options = { new: true };
   const data = await UserModel.findByIdAndUpdate(id, update, options);
   if (!data) {
-    throw new Error('Invalid request');
+    throw create(new create.BadRequest('Invalid request'));
   }
   return data;
 };
 
 const UserService = {
-  create,
+  register,
   find,
   findById,
   login,

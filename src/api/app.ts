@@ -1,5 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import helmet from 'helmet';
+import create from 'http-errors';
 import ApiRouter from './routes/index.router';
 import corsMiddleware from '@src/api/middleware/cors.middleware';
 import '@src/config/server.config';
@@ -23,8 +24,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(`${process.env.API_VERSION_IND}`, ApiRouter);
 
 /*Handle unhandled routes error*/
-app.use(async (req: Request, res: Response, next: NextFunction) => {
-  // next(createError.NotFound('Requested resource not available'));
+app.use('*', async (req: Request, res: Response, next: NextFunction) => {
+  next(new create.NotFound('Requested resource is not available'));
 });
 
 app.use(
@@ -32,7 +33,7 @@ app.use(
     res.status(err.status || 500).json({
       error: {
         status: err.status || 500,
-        message: err.message || 'Internal server error',
+        errorMessage: err.message || 'Internal server error',
       },
     });
   }
