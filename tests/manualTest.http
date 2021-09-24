@@ -2,3 +2,6 @@
 
 ### Service Root Test
 GET {{hostName}} 
+
+### Get Users Route
+GET  {{hostName}}
